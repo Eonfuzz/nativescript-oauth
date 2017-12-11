@@ -1,3 +1,4 @@
+*.js
 *.js.map
 *.log
 demo*/app/*.js
