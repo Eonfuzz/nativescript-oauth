@@ -15,4 +15,4 @@ export declare function login(successPage?: string): Promise<string>;
 export declare function logout(successPage?: string): Promise<void>;
 export declare function accessTokenExpired(): boolean;
 export declare function ensureValidToken(): Promise<string>;
-
+export declare function setInstance(instance): void;
