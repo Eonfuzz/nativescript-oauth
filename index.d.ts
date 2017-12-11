@@ -9,6 +9,7 @@ export declare function initGoogle(options: TnsOAuth.ITnsOAuthOptionsGoogle): Pr
 export declare function initUaa(options: TnsOAuth.ITnsOAuthOptionsUaa): Promise<any>;
 export declare function initLinkedIn(options: TnsOAuth.ITnsOAuthOptionsLinkedIn): Promise<any>;
 export declare function initSalesforce(options: TnsOAuth.ITnsOAuthOptionsSalesforce): Promise<any>;
+export declare function initKeycloak(options: TnsOAuth.ITnsOAuthCredentials): Promise<any>;
 
 export declare function accessToken(): string;
 export declare function login(successPage?: string): Promise<string>;

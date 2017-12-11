@@ -10,6 +10,7 @@ import { AuthHelperGoogle } from './auth-helper-google';
 import { AuthHelperUaa } from './auth-helper-uaa';
 import { AuthHelperLinkedIn } from './auth-helper-linkedin';
 import { AuthHelperSalesforce } from './auth-helper-salesforce';
+import { AuthHelperKeycloak } from './auth-helper-keycloak'
 
 import * as TnsOAuth from './tns-oauth-interfaces';
 
@@ -17,6 +18,23 @@ export var instance: TnsOAuth.ITnsAuthHelper = null;
 
 export function setInstance(_instance): void {
     instance = _instance;
+}
+
+export function initKeycloak(options: TnsOAuth.ITnsOAuthCredentials): Promise<any> {
+    return new Promise(function(resolve, reject) {
+        try {
+            if (instance !== null) {
+                reject("You've already ran init!");
+            }
+
+            instance = new AuthHelperKeycloak(options);
+            resolve(instance);
+        }
+        catch (e) {
+            console.log("Error creating spekit helper: "+e);
+            reject(e);
+        }
+    });
 }
 
 export function initOffice365(options: TnsOAuth.ITnsOAuthOptionsOffice365): Promise<any> {
