@@ -16,10 +16,6 @@ import * as TnsOAuth from './tns-oauth-interfaces';
 
 export var instance: TnsOAuth.ITnsAuthHelper = null;
 
-export function setInstance(_instance): void {
-    instance = _instance;
-}
-
 export function initKeycloak(options: TnsOAuth.ITnsOAuthCredentials): Promise<any> {
     return new Promise(function(resolve, reject) {
         try {
