@@ -144,7 +144,7 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
                                             clearHistory: true
                                         };
                                         frameModule.topmost().navigate(navEntry);
-                                    } else {
+                                    } else if (navCount === 0) {
                                         frameModule.topmost().goBack();
                                     }
                                     navCount++;
