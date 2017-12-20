@@ -20,7 +20,7 @@ export function initKeycloak(options: TnsOAuth.ITnsOAuthCredentials): Promise<an
     return new Promise(function(resolve, reject) {
         try {
             if (instance !== null) {
-                reject("You've already ran init!");
+                reject("You already ran init!");
             }
 
             instance = new AuthHelperKeycloak(options);

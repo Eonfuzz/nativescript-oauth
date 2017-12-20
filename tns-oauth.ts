@@ -137,18 +137,20 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
                         try {
                             getTokenFromCode(credentials, codeStr)
                                 .then((response: TnsOAuthModule.ITnsOAuthTokenResult) => {
-                                    TnsOAuthTokenCache.setToken(response);
-                                    if (successPage && navCount === 0) {
-                                        let navEntry: frameModule.NavigationEntry = {
-                                            moduleName: successPage,
-                                            clearHistory: true
-                                        };
-                                        frameModule.topmost().navigate(navEntry);
-                                    } else if (navCount === 0) {
-                                        frameModule.topmost().goBack();
+                                    if (response.accessToken) {
+                                        TnsOAuthTokenCache.setToken(response);
+                                        if (successPage && navCount === 0) {
+                                            let navEntry: frameModule.NavigationEntry = {
+                                                moduleName: successPage,
+                                                clearHistory: true
+                                            };
+                                            frameModule.topmost().navigate(navEntry);
+                                        } else /*if (navCount === 0)*/ {
+                                            frameModule.topmost().goBack();
+                                        }
+                                        navCount++;
+                                        resolve(response);
                                     }
-                                    navCount++;
-                                    resolve(response);
                                 })
                                 .catch((er) => {
                                     reject(er);
@@ -172,7 +174,6 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
             return false;
         };
 
-        console.log('LOGIN PAGE URL = ' + getAuthUrl(credentials));
         let authPage = new TnsOAuthPageProvider(checkCodeIntercept, getAuthUrl(credentials));
         frameModule.topmost().navigate(() => { return authPage.loginPageFunc() });
     });

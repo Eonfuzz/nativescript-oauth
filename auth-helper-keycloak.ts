@@ -14,5 +14,4 @@ export class AuthHelperKeycloak extends AuthHelper implements TnsOAuth.ITnsAuthH
     public logout() { 
         return this._logout(); 
     }
-
 }
