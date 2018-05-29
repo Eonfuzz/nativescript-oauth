@@ -105,6 +105,8 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
     return new Promise((resolve, reject) => {
         var navCount = 0;
 
+        let hasCode = false;
+
         let checkCodeIntercept = (webView, error, url): boolean => {
             var retStr = '';
             try {
@@ -117,8 +119,9 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
                     } else {
                         retStr = val0;
                     }
-                } else if (webView.request && webView.request.URL && webView.request.URL.absoluteString) {
-                    retStr = webView.request.URL.absoluteString;
+                    //} else if (webView.request && webView.request.URL && webView.request.URL.absoluteString) {
+                } else if (webView && webView.URL && webView.URL.absoluteString) {
+                    retStr = webView.URL.absoluteString;
                 } else if (url) {
                     retStr = url;
                 }
@@ -133,7 +136,8 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
                     let qsObj = querystring.parse(parsedRetStr.query);
                     let codeStr = qsObj['code'] ? qsObj['code'] : qsObj['xsrfsign'];
                     let errSubCode = qsObj['error_subcode'];
-                    if (codeStr) {
+                    if (codeStr && !hasCode) {
+                        hasCode = true;
                         try {
                             getTokenFromCode(credentials, codeStr)
                                 .then((response: TnsOAuthModule.ITnsOAuthTokenResult) => {
