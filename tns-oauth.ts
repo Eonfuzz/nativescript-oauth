@@ -5,12 +5,17 @@ import * as querystring from 'querystring';
 import * as URL from 'url';
 import * as http from 'http';
 import * as trace from "trace";
-import * as frameModule from 'ui/frame';
 import * as platform from 'platform';
 import * as utils from './tns-oauth-utils';
+
+import * as frameModule from 'ui/frame';
+import * as viewModule from "ui/core/view";
+import * as application from "application";
+
 import { TnsOAuthPageProvider } from './tns-oauth-page-provider';
 import { TnsOAuthTokenCache } from './tns-oauth-token-cache';
 import * as TnsOAuthModule from './tns-oauth-interfaces';
+import { ViewBase } from 'ui/core/view';
 
 export var ACCESS_TOKEN_CACHE_KEY = 'ACCESS_TOKEN_CACHE_KEY';
 export var REFRESH_TOKEN_CACHE_KEY = 'REFRESH_TOKEN_CACHE_KEY';
@@ -101,6 +106,9 @@ export function getTokenFromCache() {
     return TnsOAuthTokenCache.getToken();
 }
 
+let currentView : viewModule.View;
+let currentModal : ViewBase;
+
 export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOAuthCredentials, successPage?: string): Promise<TnsOAuthModule.ITnsOAuthTokenResult> {
     return new Promise((resolve, reject) => {
         var navCount = 0;
@@ -141,35 +149,34 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
                         try {
                             getTokenFromCode(credentials, codeStr)
                                 .then((response: TnsOAuthModule.ITnsOAuthTokenResult) => {
-                                    if (response.accessToken) {
-                                        TnsOAuthTokenCache.setToken(response);
-                                        if (successPage && navCount === 0) {
-                                            let navEntry: frameModule.NavigationEntry = {
-                                                moduleName: successPage,
-                                                clearHistory: true
-                                            };
-                                            frameModule.topmost().navigate(navEntry);
-                                        } else /*if (navCount === 0)*/ {
-                                            frameModule.topmost().goBack();
-                                        }
-                                        navCount++;
-                                        resolve(response);
-                                    }
+                                    // Close the modal
+                                    if (currentModal) currentModal.closeModal();
+                                    if (currentView && currentView.modal) currentView.closeModal();
+
+                                    TnsOAuthTokenCache.setToken(response);
+                                                                    
+                                    navCount++;
+
+                                    resolve(response);
                                 })
                                 .catch((er) => {
+                                    // currentModal.closeModal();
+                                    currentView.closeModal();
+
+                                    console.log("Rejecting");
                                     reject(er);
                                 });
 
                         } catch (er) {
-                            console.error('getOAuthAccessToken error occurred...');
-                            console.dir(er);
                             reject(er);
                         }
                         return true;
                     } else {
                         if (errSubCode) {
                             if (errSubCode == 'cancel') {
-                                frameModule.topmost().goBack();
+                                // Close the modal
+                                if (currentModal) currentModal.closeModal();
+                                if (currentView && currentView.modal) currentView.closeModal();
                             }
                         }
                     }
@@ -178,8 +185,15 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
             return false;
         };
 
-        let authPage = new TnsOAuthPageProvider(checkCodeIntercept, getAuthUrl(credentials));
-        frameModule.topmost().navigate(() => { return authPage.loginPageFunc() });
+        let authPage = new TnsOAuthPageProvider(checkCodeIntercept, getAuthUrl(credentials), reject);
+
+        let frame = new frameModule.Frame();
+
+        frame.navigate(() => { return authPage.loginPageFunc() });
+
+        currentView = application.getRootView();
+
+        currentModal = currentView.showModal(frame, "context", () => {}, false);
     });
 }
 

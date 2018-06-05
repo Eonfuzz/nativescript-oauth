@@ -1,5 +1,4 @@
-/// <reference path="tns-oauth-webview-helper.android.ts" />
-/// <reference path="tns-oauth-webview-helper.ios.ts" />
+/// <reference path="references.d.ts" />
 
 import { WebView  } from 'ui/web-view';
 

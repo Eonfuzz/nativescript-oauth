@@ -10,28 +10,11 @@ import { AuthHelperGoogle } from './auth-helper-google';
 import { AuthHelperUaa } from './auth-helper-uaa';
 import { AuthHelperLinkedIn } from './auth-helper-linkedin';
 import { AuthHelperSalesforce } from './auth-helper-salesforce';
-import { AuthHelperKeycloak } from './auth-helper-keycloak'
+import { AuthHelperCustom } from './auth-helper-custom';
 
 import * as TnsOAuth from './tns-oauth-interfaces';
 
 export var instance: TnsOAuth.ITnsAuthHelper = null;
-
-export function initKeycloak(options: TnsOAuth.ITnsOAuthCredentials): Promise<any> {
-    return new Promise(function(resolve, reject) {
-        try {
-            if (instance !== null) {
-                reject("You already ran init!");
-            }
-
-            instance = new AuthHelperKeycloak(options);
-            resolve(instance);
-        }
-        catch (e) {
-            console.log("Error creating spekit helper: "+e);
-            reject(e);
-        }
-    });
-}
 
 export function initOffice365(options: TnsOAuth.ITnsOAuthOptionsOffice365): Promise<any> {
     return new Promise(function (resolve, reject) {
@@ -78,7 +61,7 @@ export function initGoogle(options: TnsOAuth.ITnsOAuthOptionsGoogle): Promise<an
             instance = new AuthHelperGoogle(options.clientId, options.scope);
             resolve(instance);
         } catch (ex) {
-            console.log("Error in AuthHelperFacebook.init: " + ex);
+            console.log("Error in AuthHelperGoogle.init: " + ex);
             reject(ex);
         }
     });
@@ -138,6 +121,23 @@ export function initSalesforce(options: TnsOAuth.ITnsOAuthOptionsSalesforce): Pr
             resolve(instance);
         } catch (ex) {
             console.log("Error in AuthHelperSalesforce.init: " + ex);
+            reject(ex);
+        }
+    });
+}
+
+export function initCustom(options: TnsOAuth.ITnsOAuthOptionsCustom): Promise<any> {
+    return new Promise(function (resolve, reject) {
+        try {
+            if (instance !== null) {
+                reject("You already ran init");
+                return;
+            }
+
+            instance = new AuthHelperCustom(options.credentials, options.cookieDomains);
+            resolve(instance);
+        } catch (ex) {
+            console.log("Error in AuthHelperCustom.init: " + ex);
             reject(ex);
         }
     });
