@@ -1,5 +1,3 @@
-/// <reference path="references.d.ts" />
-
 import { WebView } from 'ui/web-view';
 import { android } from 'tns-core-modules/application';
 import { isAndroid } from 'tns-core-modules/platform'

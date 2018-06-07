@@ -1,5 +1,3 @@
-/// <reference path="references.d.ts" />
-
 import { Page } from 'ui/page';
 import { GridLayout } from 'ui/layouts/grid-layout';
 import { StackLayout } from 'ui/layouts/stack-layout';

@@ -3,8 +3,13 @@
   "version": "2.1.3",
   "description": "OAuth 2 login for NativeScript.",
   "main": "index.js",
-  "nativescript": {},
-  "scripts": {
+  "nativescript": {
+    "platforms": {
+      "ios": "4.0.0",
+      "android": "4.0.0"
+    }
+  },
+    "scripts": {
     "build": "npm i && tsc",
     "demo.android": "npm run preparedemo && cd demo-angular && tns run android",
     "preparedemo": "npm run build && cd demo-angular && tns plugin remove nativescript-oauth && tns plugin add .. && tns install",

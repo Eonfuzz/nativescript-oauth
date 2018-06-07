@@ -1,4 +1,3 @@
-/// <reference path="references.d.ts" />
 
 
 import * as querystring from 'querystring';
@@ -219,26 +218,15 @@ export function refreshToken(credentials: TnsOAuthModule.ITnsOAuthCredentials): 
 }
 
 export function logout(cookieDomains: string[], successPage?: string) {
-    if (platform.isIOS) {
-        let cookieArr = utils.nsArrayToJSArray(NSHTTPCookieStorage.sharedHTTPCookieStorage.cookies);
-        for (var i = 0; i < cookieArr.length; i++) {
-            var cookie: NSHTTPCookie = <NSHTTPCookie>cookieArr[i];
-            for (var j = 0; j < cookieDomains.length; j++) {
-                if (utils.endsWith(cookie.domain, cookieDomains[j])) {
-                    NSHTTPCookieStorage.sharedHTTPCookieStorage.deleteCookie(cookie);
-                }
-            }
-        }
-    } else if (platform.isAndroid) {
-        let cookieManager = android.webkit.CookieManager.getInstance();
-        if ((<any>cookieManager).removeAllCookies) {
-            let cm23 = <any>cookieManager;
-            cm23.removeAllCookies(null);
-            cm23.flush();
-        } else if (cookieManager.removeAllCookie) {
-            cookieManager.removeAllCookie();
-            cookieManager.removeSessionCookie();
-        }
+
+    let cookieManager = android.webkit.CookieManager.getInstance();
+    if ((<any>cookieManager).removeAllCookies) {
+        let cm23 = <any>cookieManager;
+        cm23.removeAllCookies(null);
+        cm23.flush();
+    } else if (cookieManager.removeAllCookie) {
+        cookieManager.removeAllCookie();
+        cookieManager.removeSessionCookie();
     }
 
 

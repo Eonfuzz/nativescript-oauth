@@ -1,5 +1,3 @@
-/// <reference path="references.d.ts" />
-
 import * as URL from 'url';
 import * as http from 'http';
 import * as querystring from 'querystring';

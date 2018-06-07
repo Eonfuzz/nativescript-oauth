@@ -1,6 +1,4 @@
 
-
-
 export interface ITnsAuthHelper {
     credentials: ITnsOAuthCredentials;
     tokenResult: ITnsOAuthTokenResult;

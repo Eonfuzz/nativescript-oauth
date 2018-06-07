@@ -1,7 +1,3 @@
-/// <reference path="references.d.ts" />
-
-
-
 import * as applicationModule from 'application';
 import * as utils from 'utils/utils';
 import { AuthHelperOffice365 } from './auth-helper-office365';

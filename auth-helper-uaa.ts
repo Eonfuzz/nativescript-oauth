@@ -1,5 +1,3 @@
-/// <reference path="references.d.ts" />
-
 import * as tnsOauth from './tns-oauth';
 import { AuthHelper } from './auth-helper';
 import * as TnsOAuth from './tns-oauth-interfaces';
