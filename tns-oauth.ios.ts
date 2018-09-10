@@ -185,14 +185,12 @@ export function loginViaAuthorizationCodeFlow(credentials: TnsOAuthModule.ITnsOA
         };
 
         let authPage = new TnsOAuthPageProvider(checkCodeIntercept, getAuthUrl(credentials), reject);
+        frameModule.topmost().navigate(() => { return authPage.loginPageFunc() });
 
-        let frame = new frameModule.Frame();
-
-        frame.navigate(() => { return authPage.loginPageFunc() });
-
-        currentView = application.getRootView();
-
-        currentModal = currentView.showModal(frame, "context", () => {}, false);
+//        let frame = new frameModule.Frame();
+//        frame.navigate(() => { return authPage.loginPageFunc() });
+//        currentView = application.getRootView();
+//        currentModal = currentView.showModal(frame, "context", () => {}, false);
     });
 }
 
